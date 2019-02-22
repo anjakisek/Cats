@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: springbootexample
+
+  output:
+    ansi:
+      enabled: always
+
+#port used to expose actuator
+management.server:
+  port: 8080
+  address: 127.0.0.1
+
+server:
+  port: 8081
+
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      enabled: true
+      show-details: always
+    info:
+      enabled: true
+
+
