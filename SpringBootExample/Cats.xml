@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <cats>
-    <cat name="Činkole">
-        <description>sivec</description>
-        <hungry>false</hungry>
-    </cat>
-    <cat name="Lindi">
-        <description>črna in bela</description>
-        <hungry>false</hungry>
-    </cat>
-    <cat name="Miki">
-        <description>črn in požrešen</description>
+    <cat id="0">
+        <description>črna in požrešna</description>
         <hungry>true</hungry>
+        <name>Lili</name>
+    </cat>
+    <cat id="0">
+        <description>črna in požrešna</description>
+        <hungry>true</hungry>
+        <name>Lindi</name>
     </cat>
 </cats>
