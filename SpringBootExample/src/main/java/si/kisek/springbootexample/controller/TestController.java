@@ -2,12 +2,14 @@ package si.kisek.springbootexample.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import si.kisek.springbootexample.model.Cat;
 import si.kisek.springbootexample.model.CatRepository;
 import si.kisek.springbootexample.model.ListCats;
+import si.kisek.springbootexample.services.CatService;
 import si.kisek.springbootexample.utilities.Json;
 import si.kisek.springbootexample.utilities.Xml;
 
@@ -22,34 +24,41 @@ import java.util.stream.Collectors;
 public class TestController {
 
 
-    /* repository for cat data base */
-    private CatRepository repository;
+/* //////////////////////////////////////////
+        REST SERVICE Z UPORABO BAZE
+ ////////////////////////////////////////// */
 
-    @Inject
-    public void setRepository(CatRepository repository) {
-        this.repository = repository;
+    private final CatService catService;
+
+    public TestController(@Autowired CatService catService) {
+        this.catService = catService;
     }
+
+
+
+
     @RequestMapping(
             value="/api/cats",
             consumes="application/json",
             method = RequestMethod.POST)
-    public ResponseEntity<?> addCat(@RequestBody String body) {
-        Cat cat = Json.fromJson(body, Cat.class);
-        return new ResponseEntity<>(repository.save(cat), HttpStatus.CREATED);
+    public ResponseEntity<?> addCat(@RequestBody String body){
+
+        catService.addCat(body);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @RequestMapping(
             value="/api/cats",
             method = RequestMethod.GET)
     public ResponseEntity<Collection<Cat>> getAllCats() {
-        return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(catService.getAllCats(), HttpStatus.OK);
     }
 
     @RequestMapping(
             value = "/api/cats/{id}",
             method = RequestMethod.GET)
     public ResponseEntity<Cat> getCatWithId(@PathVariable Long id) {
-        return new ResponseEntity<>(repository.findById(id).get(), HttpStatus.OK);
+        return new ResponseEntity<>(catService.getCatWithId(id), HttpStatus.OK);
     }
 
     @RequestMapping(
@@ -57,7 +66,7 @@ public class TestController {
             params = {"name"},
             method = RequestMethod.GET)
     public ResponseEntity<Collection<Cat>> findCatWithName(@RequestParam(value = "name") String name) {
-        return new ResponseEntity<>(repository.findByName(name), HttpStatus.OK);
+        return new ResponseEntity<>(catService.findCatWithName(name), HttpStatus.OK);
     }
 
     @RequestMapping(
@@ -65,25 +74,21 @@ public class TestController {
             method = RequestMethod.PUT)
     public ResponseEntity<Cat> updateCatFromDB(@PathVariable("id") long id, @RequestBody Cat cat) {
 
-        Cat currentCat = repository.findById(id).get();
-        currentCat.setName(cat.getName());
-        currentCat.setDescription(cat.getDescription());
-        currentCat.setHungry(cat.getHungry());
 
-        return new ResponseEntity<>(repository.save(currentCat), HttpStatus.OK);
+        return new ResponseEntity<Cat>(catService.updateCatFromDB(id, cat), HttpStatus.OK);
     }
 
     @RequestMapping(
             value = "/api/cats/{id}",
             method = RequestMethod.DELETE)
     public void deleteCatWithId(@PathVariable Long id) {
-        repository.deleteById(id);
+        catService.deleteCatWithId(id);
     }
 
     @RequestMapping(
             method = RequestMethod.DELETE)
     public void deleteAllCats() {
-        repository.deleteAll();
+        catService.deleteAllCats();
     }
 
 
@@ -96,7 +101,9 @@ public class TestController {
 
 
 
-
+/* //////////////////////////////////////////
+ PROBAVANJE REST SERVICA BREZ UPORABE BAZE
+ ////////////////////////////////////////// */
 
 
 
