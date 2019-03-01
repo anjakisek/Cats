@@ -23,15 +23,21 @@ public class Cat {
     @Column(name="hungry")
     private boolean hungry;
 
+    /*@ManyToOne(targetEntity = Owner.class, fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="owner_id",referencedColumnName="id", foreignKey = @ForeignKey(name = "fk_cat_owner"))*/
+    private Long owner_id;
+
     @JsonCreator
     public Cat(
             @JsonProperty("name") String name,
             @JsonProperty("description") String description,
-            @JsonProperty("hungry") boolean hungry) {
+            @JsonProperty("hungry") boolean hungry,
+            @JsonProperty("owner_id") Long owner_id) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.hungry = hungry;
+        this.owner_id = owner_id;
     }
 
 
@@ -84,13 +90,26 @@ public class Cat {
     }
 
 
+    @JsonProperty("owner_id")
+    @XmlElement
+    public Long getOwner_id() {
+        return owner_id;
+    }
+
+
+
+    public void setOwner_id(Long owner_id) {
+        this.owner_id = owner_id;
+    }
+
+
     @Override
     public String toString() {
         return "Cat {" +
                 "id=" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", hungry='" + hungry + '\'' +
+                ", hungry='" + hungry + '\''+
                 '}';
     }
 

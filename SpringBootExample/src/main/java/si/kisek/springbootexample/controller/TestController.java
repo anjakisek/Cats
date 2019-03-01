@@ -7,13 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import si.kisek.springbootexample.model.Cat;
-import si.kisek.springbootexample.model.CatRepository;
 import si.kisek.springbootexample.model.ListCats;
+import si.kisek.springbootexample.model.Owner;
 import si.kisek.springbootexample.services.CatService;
+import si.kisek.springbootexample.services.OwnerService;
 import si.kisek.springbootexample.utilities.Json;
 import si.kisek.springbootexample.utilities.Xml;
 
-import javax.inject.Inject;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,12 +27,74 @@ public class TestController {
 /* //////////////////////////////////////////
         REST SERVICE Z UPORABO BAZE
  ////////////////////////////////////////// */
+private final OwnerService ownerService;
+private final CatService catService;
 
-    private final CatService catService;
-
-    public TestController(@Autowired CatService catService) {
+    public TestController(OwnerService ownerService, @Autowired CatService catService) {
+        this.ownerService = ownerService;
         this.catService = catService;
     }
+
+
+
+
+    @RequestMapping(
+            value="/api/owners",
+            consumes="application/json",
+            method = RequestMethod.POST)
+    public ResponseEntity<?> addOwner(@RequestBody String body){
+
+        ownerService.addOwner(body);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @RequestMapping(
+            value="/api/owners",
+            method = RequestMethod.GET)
+    public ResponseEntity<Collection<Owner>> getAllOwners() {
+        return new ResponseEntity<>(ownerService.getAllOwners(), HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/api/owners/{id}",
+            method = RequestMethod.GET)
+    public ResponseEntity<Owner> getOwnerWithId(@PathVariable Long id) {
+        return new ResponseEntity<>(ownerService.getOwnerWithId(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value="/api/owners",
+            params = {"name"},
+            method = RequestMethod.GET)
+    public ResponseEntity<Collection<Owner>> findOwnerWithName(@RequestParam(value = "name") String name) {
+        return new ResponseEntity<>(ownerService.findOwnerWithName(name), HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/api/owners/{id}",
+            method = RequestMethod.PUT)
+    public ResponseEntity<Owner> updateOwnerFromDB(@PathVariable("id") long id, @RequestBody Owner owner) {
+
+
+        return new ResponseEntity<Owner>(ownerService.updateOwnerFromDB(id, owner), HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/api/owners/{id}",
+            method = RequestMethod.DELETE)
+    public void deleteOwnerWithId(@PathVariable Long id) {
+        ownerService.deleteOwnerWithId(id);
+    }
+
+    @RequestMapping(
+            value = "api/owners",
+            method = RequestMethod.DELETE)
+    public void deleteAllOwners() {
+        ownerService.deleteAllOwners();
+    }
+
+
+
 
 
 
@@ -86,6 +148,7 @@ public class TestController {
     }
 
     @RequestMapping(
+            value = "/api/cats",
             method = RequestMethod.DELETE)
     public void deleteAllCats() {
         catService.deleteAllCats();
