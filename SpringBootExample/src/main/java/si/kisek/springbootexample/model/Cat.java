@@ -23,8 +23,8 @@ public class Cat {
     @Column(name="hungry")
     private boolean hungry;
 
-    /*@ManyToOne(targetEntity = Owner.class, fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="owner_id",referencedColumnName="id", foreignKey = @ForeignKey(name = "fk_cat_owner"))*/
+    @ManyToOne(targetEntity = Owner.class, fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="owner_id",referencedColumnName="id")
     private Long owner_id;
 
     @JsonCreator
@@ -39,7 +39,6 @@ public class Cat {
         this.hungry = hungry;
         this.owner_id = owner_id;
     }
-
 
 
     public Cat() {}
@@ -90,12 +89,12 @@ public class Cat {
     }
 
 
+
     @JsonProperty("owner_id")
     @XmlElement
     public Long getOwner_id() {
         return owner_id;
     }
-
 
 
     public void setOwner_id(Long owner_id) {

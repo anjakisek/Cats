@@ -7,29 +7,30 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Owner {
 
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "id", updatable = false)
     private long id;
 
     @Column(name="name")
     private String name;
 
-    @Column(name="cats")
-    /*@OneToMany(mappedBy = "id")*/
-    private List<Cat> cats = new ArrayList<Cat>();
-
+    private Set<Cat> setCats =  new HashSet<Cat>(0);
 
     @JsonCreator
     public Owner(@JsonProperty("name") String name) {
         this.name = name;
-        /*this.cats = cats;*/
+        this.setCats = setCats;
     }
+
+
 
 
     public Owner() {}
@@ -48,24 +49,14 @@ public class Owner {
 
 
 
+
+
     public void setName(String name) {
         this.name = name;
     }
 
 
 
-    /*@JsonProperty("cats")
-    @XmlElement
-    public List<Cat> getCats() {
-        return cats;
-    }
-
-
-
-    public void setCats(List<Cat> cats) {
-        this.cats = cats;
-    }
-*/
 
     @Override
     public String toString() {

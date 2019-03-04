@@ -48,6 +48,7 @@ public class CatServiceImpl implements CatService {
         currentCat.setName(cat.getName());
         currentCat.setDescription(cat.getDescription());
         currentCat.setHungry(cat.getHungry());
+        currentCat.setOwner_id(cat.getOwner_id());
         repository.save(currentCat);
         return currentCat;
     }

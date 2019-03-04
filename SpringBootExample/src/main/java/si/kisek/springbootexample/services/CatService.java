@@ -1,6 +1,5 @@
 package si.kisek.springbootexample.services;
 
-import org.springframework.stereotype.Service;
 import si.kisek.springbootexample.model.Cat;
 
 import java.util.Collection;
